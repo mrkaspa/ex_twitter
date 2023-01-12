@@ -1,0 +1,28 @@
+<section class="row phx-hero">
+  <article class="column">
+    <h2>@<%= link @tweet.user.username, to: Routes.page_path(@conn, :show, @tweet.user.username) %></h2>
+    <p>
+      <%= @tweet.body %>
+    </p>
+
+    <%= if @current_user && @current_user.id == @tweet.user_id do %>
+      <%= link "Delete", to: Routes.tweet_path(@conn, :delete, @tweet.id), method: :delete %>
+    <% end %>
+  </article>
+</section>
+
+<!--
+<h1>Show Tweet</h1>
+
+<ul>
+
+  <li>
+    <strong>Body:</strong>
+    <%= @tweet.body %>
+  </li>
+
+</ul>
+
+<span><%= #link "Edit", to: Routes.tweet_path(@conn, :edit, @tweet) %></span> |
+<span><%= #link "Back", to: Routes.tweet_path(@conn, :index) %></span>
+-->

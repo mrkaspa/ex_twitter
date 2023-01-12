@@ -1,0 +1,11 @@
+<%= if @current_user do %>
+  <section class="phx-hero">
+    <h1><%= link "Make a tweet!", to: Routes.tweet_path(@conn, :new) %></h1>
+  </section>
+<% end %>
+
+<%= for tweet <- @page do %>
+  <%= render ExTwitterWeb.TweetView, "show.html", conn: @conn, current_user: @current_user, tweet: tweet %>
+<% end %>
+
+<%= pagination_links @page %>

@@ -1,0 +1,25 @@
+<%= if @username == @current_user.username do %>
+  <%= link "Search user", to: Routes.account_path(@conn, :new_search) %>
+<% end %>
+
+<%= for user <- @page do %>
+  <section class="row phx-hero">
+    <article class="column">
+      <h2><%= user.name %>  @<%= link user.username, to: Routes.page_path(@conn, :show, user.username) %></h2>
+      <%= if user.id != @current_user.id do %>
+        <h4>
+          <%= if !Enum.any?(@my_follows_ids, & &1 == user.id) do %>
+            <%= form_for @conn, Routes.friendship_path(@conn, :create), [method: :post], fn f -> %>
+              <%= hidden_input f, :user_id, value: user.id %>
+              <%= submit "Follow" %>
+            <% end %>
+          <% else %>
+            <%= form_for @conn, Routes.friendship_path(@conn, :delete, user.id), [method: :delete], fn _ -> %>
+              <%= submit "Unfollow", class: "btn btn-danger" %>
+            <% end %>
+          <% end %>
+        </h4>
+      <% end %>
+    </article>
+  </section>
+<% end %>

@@ -1,0 +1,33 @@
+<section class="row">
+  <section class="column">
+    <h2>
+      <%= @user.username %>
+    </h2>
+    <h3>
+      <%= link "Following #{@follows_counter}", to: Routes.page_friendship_path(@conn, :follows, @user.username) %>
+    </h3>
+    <h3>
+      <%= link "Followed by #{@followers_counter}", to: Routes.page_friendship_path(@conn, :followers, @user.username) %>
+    </h3>
+    <%= if @user.id != @current_user.id do %>
+      <h4>
+        <%= if !@follow_user do %>
+          <%= form_for @conn, Routes.friendship_path(@conn, :create), [method: :post], fn f -> %>
+            <%= hidden_input f, :user_id, value: @user.id %>
+            <%= submit "Follow" %>
+          <% end %>
+        <% else %>
+           <%= form_for @conn, Routes.friendship_path(@conn, :delete, @user.id), [method: :delete], fn _ -> %>
+            <%= submit "Unfollow", class: "btn btn-danger" %>
+          <% end %>
+        <% end %>
+      </h4>
+    <% end %>
+  </section>
+  <section class="column">
+    <%= for tweet <- @page do %>
+      <%= render ExTwitterWeb.TweetView, "show.html", conn: @conn, current_user: @current_user, tweet: tweet %>
+    <% end %>
+    <%= pagination_links @page %>
+  </section>
+</section>
